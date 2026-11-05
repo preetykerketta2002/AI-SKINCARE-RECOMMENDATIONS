@@ -1,3 +1,7 @@
+import os
+from pathlib import Path
+
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
@@ -5,9 +9,15 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 
 app = Flask(__name__)
-CORS(app)
+allowed_origins = [
+    origin.strip()
+    for origin in os.environ.get("FRONTEND_ORIGIN", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+CORS(app, resources={r"/*": {"origins": allowed_origins}})
 
-model = load_model("skin_model_final.h5")
+model_path = Path(__file__).resolve().parent / "skin_condition_improvedmodel.h5"
+model = load_model(model_path)
 
 classes = [
     "acne_inflammatory",
@@ -108,4 +118,7 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=False)
+
+
+
