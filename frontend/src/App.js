@@ -9,7 +9,6 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
-  const camRef = useRef();
   const galRef = useRef();
   const dzRef = useRef();
   const reportRef = useRef(null);
@@ -317,4 +316,5 @@ export default function App() {
     </>
   );
 }
+
 
